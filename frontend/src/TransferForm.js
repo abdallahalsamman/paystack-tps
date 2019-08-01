@@ -31,7 +31,11 @@ class TransferForm extends React.Component {
   initTransfer(e){
     e.preventDefault();
     axios.post('http://localhost:3000/api/transfers', this.state.form)
-      .then(resp => console.log(resp));
+      .then(resp => {
+        let sms_code = prompt('We sent you a confirmation code by SMS. Please enter the code here to complete this transfer');
+        axios.post('http://localhost:3000/api/transfers_finalize', {transfer_code: resp.data.transfer_code, otp: sms_code})
+          .then(resp => console.log(resp))
+      });
   }
 
   render(){
