@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router'
 const axios = require('axios');
 
 class TransferForm extends React.Component {
@@ -13,7 +14,6 @@ class TransferForm extends React.Component {
   componentDidMount(){
     axios.get('http://localhost:3000/api/banks')
       .then((resp) => {
-        console.log(resp);
         this.setState({banks: resp.data.data});
       })
   }
@@ -21,7 +21,7 @@ class TransferForm extends React.Component {
   handleInputChange(event) {
     const target = event.target;
     const name = target.name;
-    const value = target.value;
+    let value = target.value;
 
     this.setState({
       form: {...this.state.form, [name]: value}
@@ -30,11 +30,23 @@ class TransferForm extends React.Component {
 
   initTransfer(e){
     e.preventDefault();
+
+    if (!window.confirm('Are you sure you want to send '
+      + this.state.form.send_amount
+      + 'NGN to ' + this.state.form.account_name
+      + ' ' + this.state.form.account_number)) return
+
     axios.post('http://localhost:3000/api/transfers', this.state.form)
       .then(resp => {
-        let sms_code = prompt('We sent you a confirmation code by SMS. Please enter the code here to complete this transfer');
-        axios.post('http://localhost:3000/api/transfers_finalize', {transfer_code: resp.data.transfer_code, otp: sms_code})
-          .then(resp => console.log(resp))
+        // if otp enabled
+        // let sms_code = prompt('We sent you a confirmation code by SMS. Please enter the code here to complete this transfer');
+        // axios.post('http://localhost:3000/api/transfers_finalize', {transfer_code: resp.data.data.transfer_code, otp: sms_code})
+        //   .then(resp => console.log(resp))
+
+        if(resp.data.message == 'Transfer has been queued') {
+          alert(resp.data.message)
+          return window.location.href = "/"
+        }
       });
   }
 
@@ -45,12 +57,13 @@ class TransferForm extends React.Component {
        <form onSubmit={this.initTransfer}>
         <label>
           Amount to send:
-          <input name="send_amount" value={this.state.form.send_amount} type="number" onChange={this.handleInputChange}/>
+          <input name="send_amount" value={this.state.form.send_amount} type="number" onChange={this.handleInputChange} required/>
+          NGN
         </label>
         <br/>
         <label>
           Bank Name:
-          <select name="bank_code" value={this.state.form.bank_code} onChange={this.handleInputChange}>
+          <select name="bank_code" value={this.state.form.bank_code} onChange={this.handleInputChange} required>
           {this.state.banks.map(bank =>
             <option value={bank.code}>{bank.name}</option>
           )}
@@ -59,7 +72,7 @@ class TransferForm extends React.Component {
         <br/>
         <label>
           Account Number:
-          <input name="account_number" value={this.state.form.account_number} type="number" onChange={this.handleInputChange}/>
+          <input name="account_number" value={this.state.form.account_number} type="number" onChange={this.handleInputChange} required/>
         </label>
         <br/>
         <label>
@@ -74,7 +87,7 @@ class TransferForm extends React.Component {
         <br/>
         <label>
           Transfer Note:
-          <input name="transfer_note" value={this.state.form.transfer_note} onChange={this.handleInputChange}/>
+          <input name="reason" value={this.state.form.reason} onChange={this.handleInputChange}/>
         </label>
         <br/>
         <label>

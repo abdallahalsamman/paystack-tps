@@ -25,16 +25,37 @@ app.post('/api/transfers', (req, res) => {
     .then(body => {
       paystack.transfer.create({
         source: "balance",
-        amount: req.body.send_amount,
-        recipient: body.data.recipient_code
+        amount: req.body.send_amount * 100,
+        recipient: body.data.recipient_code,
+        reason: req.body.reason,
+        reference: req.body.reference,
       })
       .then(body => {
         res.send(body)
       })
-      .catch(error => res.send(error));
+      .catch(error => {
+        res.send(error)
+      });
     })
     .catch(error => res.send(error));
 });
+
+app.post('/api/transfers_finalize', (req, res) => {
+  console.log(req.body)
+  paystack.transfer
+    .finalize({
+      transfer_code: req.body.transfer_code,
+      otp: req.body.otp
+    })
+    .then(body => {
+      console.log("transfer.finalize", body)
+      res.send(body)
+    })
+    .catch(error => {
+      console.log("transfer.finalize:error", error)
+      res.send(error)
+    });
+})
 
 app.get('/api/banks', (req, res) => {
   paystack.misc
