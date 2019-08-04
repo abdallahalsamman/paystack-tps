@@ -1,6 +1,8 @@
 import React from 'react';
 const axios = require('axios');
 
+const API_URL = "https://paystack-evexoio.herokuapp.com:3000/api"
+
 class TransfersBrowser extends React.Component {
   constructor(props){
     super(props);
@@ -8,7 +10,7 @@ class TransfersBrowser extends React.Component {
   }
 
   componentDidMount(){
-    axios.get('http://localhost:3000/api/transfers')
+    axios.get(API_URL+'/api/transfers')
       .then((resp) => {
         this.setState({transfers: resp.data.data});
       })

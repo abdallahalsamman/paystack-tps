@@ -2,6 +2,8 @@ import React from 'react';
 import { Redirect } from 'react-router'
 const axios = require('axios');
 
+const API_URL = "https://paystack-evexoio.herokuapp.com:3000/api"
+
 class TransferForm extends React.Component {
   constructor(props){
     super(props);
@@ -12,7 +14,7 @@ class TransferForm extends React.Component {
   }
 
   componentDidMount(){
-    axios.get('http://localhost:3000/api/banks')
+    axios.get(API_URL+'/api/banks')
       .then((resp) => {
         this.setState({banks: resp.data.data});
       })
@@ -36,11 +38,11 @@ class TransferForm extends React.Component {
       + 'NGN to ' + this.state.form.account_name
       + ' ' + this.state.form.account_number)) return
 
-    axios.post('http://localhost:3000/api/transfers', this.state.form)
+    axios.post(API_URL+'/api/transfers', this.state.form)
       .then(resp => {
         // if otp enabled
         // let sms_code = prompt('We sent you a confirmation code by SMS. Please enter the code here to complete this transfer');
-        // axios.post('http://localhost:3000/api/transfers_finalize', {transfer_code: resp.data.data.transfer_code, otp: sms_code})
+        // axios.post(API_URL+'/api/transfers_finalize', {transfer_code: resp.data.data.transfer_code, otp: sms_code})
         //   .then(resp => console.log(resp))
 
         if(resp.data.message == 'Transfer has been queued') {

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm start\" ",
+    "start": "cd frontend; npm run-script build; cd ../backend; npm start",
+    "dev-start": "concurrently \"cd backend && npm start\" \"cd frontend && npm start\" ",
     "install": "concurrently \"cd backend && npm install\" \"cd frontend && npm install\" ",
     "test": "concurrently \"cd backend && npm test\" \"cd frontend && npm test\" "
   },

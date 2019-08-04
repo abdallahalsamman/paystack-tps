@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require("path");
 const cors = require('cors');
 const paystack = require('paystack-api')('sk_test_6a395c86e68eaa86165d4401d0cbea05619f8573');
 var bodyParser = require('body-parser')
@@ -63,5 +64,7 @@ app.get('/api/banks', (req, res) => {
     .then(body => res.send(body))
     .catch(error => res.send(error));
 });
+
+app.use(express.static(path.join(__dirname, '../', 'frontend', 'build')));
 
 app.listen(3000, () => console.log("App is listening on port 3000"));
