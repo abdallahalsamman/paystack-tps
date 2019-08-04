@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 const axios = require('axios');
 
-const API_URL = "https://paystack-evexoio.herokuapp.com:3000/"
+const API_URL = "https://paystack-evexoio.herokuapp.com"
 
 class TransfersBrowser extends React.Component {
   constructor(props){
