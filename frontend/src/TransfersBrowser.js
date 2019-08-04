@@ -1,7 +1,8 @@
 import React from 'react';
+import { BrowserRouter as Router, Link } from "react-router-dom";
 const axios = require('axios');
 
-const API_URL = "https://paystack-evexoio.herokuapp.com:3000/api"
+const API_URL = "https://paystack-evexoio.herokuapp.com:3000/"
 
 class TransfersBrowser extends React.Component {
   constructor(props){
@@ -20,7 +21,7 @@ class TransfersBrowser extends React.Component {
    return (
      <div>
       <h1>Transfers</h1>
-      <a href="/transfer/new">New Transfer</a>
+      <Link to="/transfer/new">New Transfer</Link>
       <table border="1" width="100%">
         <thead>
           <tr>

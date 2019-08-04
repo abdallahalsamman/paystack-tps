@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router'
 const axios = require('axios');
 
-const API_URL = "https://paystack-evexoio.herokuapp.com:3000/api"
+const API_URL = "https://paystack-evexoio.herokuapp.com:3000/"
 
 class TransferForm extends React.Component {
   constructor(props){
